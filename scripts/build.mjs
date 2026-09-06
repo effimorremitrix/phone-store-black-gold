@@ -21,6 +21,8 @@ replaceOnce('K,re]=_.useState(6e3)','K,re]=_.useState(Math.max(6000,...storeCata
 for(const [a,b] of [['פתיחת קטלוג CityCell המלא','לכל המלאי שלנו'],['Open the full CityCell catalog','View all store inventory'],['Открыть полный каталог CityCell','Весь ассортимент магазина'],['בקטלוג CityCell כרגע','במלאי שלנו כרגע'],['in the CityCell catalog','in our inventory'],['В каталоге CityCell','В нашем ассортименте']])app=app.split(a).join(b);
 // Keep both views on the same authoritative inventory, with no supplier-only subset.
 app='const storeCatalog = await fetch("/citycell-web-catalog.json").then(r=>{if(!r.ok)throw new Error("Catalog unavailable");return r.json()});\n'+app;
+// Match the captured read-only backend responses on static hosting as well.
+app=app.replace('fetch(a,l){return globalThis.fetch(a,{...l??{},credentials:"include"})}',`fetch(a,l){const u=new URL(a,location.origin);if(u.pathname.startsWith('/api/trpc/')){const ps=u.pathname.slice('/api/trpc/'.length).split(',');const rs=ps.map(p=>({result:{data:{json:p==='managedCatalog.changes'?{products:[]}:p==='storefront.sourceData'?{status:'unavailable',data:null}:{status:'unavailable',message:'The original private backend is not included.'}}}}));return Promise.resolve(new Response(JSON.stringify(u.searchParams.has('batch')?rs:rs[0]),{headers:{'Content-Type':'application/json'}}));}return globalThis.fetch(a,{...l??{},credentials:'include'});}`);
 write('public/assets/index-D94YxEFh.js',app);
 write('public/assets/index-DVRKiZVu.css',localize(read('source/deployed.css')));
 write('public/index.html',read('source/index.html').replace(/<link rel="preconnect"[^>]+>/g,'').replace(/<link href="https:\/\/fonts.googleapis.com[^>]+>/,'<link rel="stylesheet" href="/assets/fonts.css">')); 
@@ -28,3 +30,4 @@ const catalog=JSON.parse(localize(read('source/catalog.original.json')));
 write('public/citycell-web-catalog.json',JSON.stringify(catalog));
 write('public/_redirects','/* /index.html 200\n');
 console.log(`Built ${catalog.products.length} shared catalog/inventory products and ${manifest.assets.length} local images.`);
+fs.cpSync(path.join(root,'public'),path.join(root,'dist'),{recursive:true});
