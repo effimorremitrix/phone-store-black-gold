@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import './fetch-assets.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const write=(p,s)=>{fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),s)};

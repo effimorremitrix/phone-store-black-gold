@@ -1,1 +1,15 @@
-{"name":"phone-store-black-gold","private":true,"version":"1.0.0","type":"module","scripts":{"build":"node scripts/build.mjs","start":"node server.mjs","test":"node scripts/verify.mjs"},"engines":{"node":">=22"}}
+{
+  "name": "phone-store-black-gold",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node server.mjs",
+    "test": "node scripts/verify.mjs",
+    "build:hosting": "node scripts/build.mjs && python scripts/optimize-images.py"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

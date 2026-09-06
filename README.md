@@ -41,3 +41,7 @@ This is a replication of the accessible deployed public website, not a recovery 
 Fifteen legacy `/manus-storage/p*.webp` references returned HTML instead of images on the original site. They are recorded as unavailable in the manifest, and their fallback references are mapped to the corresponding saved catalog photos. All available catalog and category/hero image URLs were downloaded successfully.
 
 No new license is asserted over the original site or third-party assets. Existing notices in the deployed code remain intact.
+
+## Hosted version
+
+The Sites deployment uses 1600-pixel WebP variants at quality 92 to fit the hosting upload limit. Every original image remains unchanged in the GitHub repository. Install `requirements-hosting.txt` and run `npm run build:hosting` to reproduce the smaller deployment in `dist/`. The hosting source fetches missing images using the recorded manifest and verifies their original checksums. The static application returns the captured read-only API responses locally; no admin writes are enabled.
